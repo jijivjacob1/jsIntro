@@ -67,11 +67,10 @@ $searchBtn.addEventListener("click", handleSearchButtonClick);
 // Set filteredAddresses to addressData initially
 var filteredUfoData = dataSet;
 
-console.log(dataSet.length );
 
 pageCount = Math.ceil(filteredUfoData.length / pgSz);
 
-console.log(pageCount);
+
 
 // renderTable renders the filteredAddresses to the tbody
 function renderTable(startRow) {
@@ -105,7 +104,7 @@ function renderTable(startRow) {
       columnsToFilter = [];
       
       if ($datetimeInput.value.trim().length > 0){
-        console.log($datetimeInput.value.trim());
+        
         columnsToFilter.push("datetime");
         filterCriteria = filterCriteria + $datetimeInput.value.trim().toLowerCase();
       }
@@ -130,11 +129,11 @@ function renderTable(startRow) {
   }
 
   function handleSearchButtonClick() {
-    console.log("Entring filter");
+
     // Format the user's search by removing leading and trailing whitespace, lowercase the string
   
     var filterCriteria = getFilterCriteria();
-    console.log(filterCriteria );
+   
  
     
   
@@ -152,13 +151,12 @@ function renderTable(startRow) {
        filterColumns += ufoData[columnsToFilter[i]].toLowerCase();
     }
    
-      console.log("filterCriteria =>" + filterCriteria) ;
-      console.log("filterColumns =>" + filterColumns) ;
+   
       // If true, add the address to the filteredAddresses, otherwise don't add it to filteredAddresses
       return ((filterColumns === filterCriteria));
     });
     renderTable(firstRow);
-    console.log(filteredUfoData.length) ;
+    
     pageCount = Math.ceil(filteredUfoData.length / pgSz);
     
     currStrtPg = 1;
@@ -170,8 +168,7 @@ function renderTable(startRow) {
   }
 
   function previous(liTagPrev){
-    console.log("previous");
-    console.log(liTagPrev);
+ 
     
     
     if ((currStrtPg - pagination_cnts) < 1 ) {
@@ -182,8 +179,7 @@ function renderTable(startRow) {
     else{
     currEndPg = currStrtPg - 1;
     currStrtPg = currStrtPg - pagination_cnts;
-    console.log("currStrtPg =>" + currStrtPg);
-    console.log("currEndPg =>" + currEndPg);
+   
     //renderTable(currStrtPg - 1);
     renderTable((currStrtPg - 1) * pgSz  )
     initPagination();
@@ -191,7 +187,7 @@ function renderTable(startRow) {
   }
 
   function next(liTagNext){
-    console.log("next");
+  
     
     
     if ((currStrtPg + pagination_cnts ) > pageCount ) {
@@ -206,8 +202,7 @@ function renderTable(startRow) {
       initPagination();
     }
     
-    console.log("currStrtPg =>" + currStrtPg);
-    console.log("currEndPg =>" + currEndPg);
+
   }
 
 function deactivateAllPgntn(){
@@ -220,8 +215,7 @@ function deactivateAllPgntn(){
 
 
 function setCurrPage(aiTag){
-  console.log("setCurrPage");
-  console.log(aiTag.text);
+
   
   renderTable((aiTag.text - 1) * pgSz  ); 
   
@@ -232,8 +226,7 @@ function setCurrPage(aiTag){
 
 function initPagination()
 {
-  console.log("currStrtPg =>" + currStrtPg);
-  console.log("currEndPg =>" + currEndPg);
+ 
   var nav = ' <li><a href="#" aria-label="Previous" onclick="previous(this);"> <span aria-hidden="true">&laquo;</span></a></li>';
   for (var s=currStrtPg; s<=currEndPg; s++){
       if (s ==  currStrtPg)
