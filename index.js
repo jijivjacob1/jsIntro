@@ -20,6 +20,46 @@ var pageCount = 0 ;
 
 currEndPg = pagination_cnts;
 
+cityList = Array.from((new Set(dataSet.map(d=>d.city)))).sort();
+stateList = Array.from((new Set(dataSet.map(d=>d.state)))).sort();
+countryList = Array.from((new Set(dataSet.map(d=>d.country)))).sort();
+shapeList = Array.from((new Set(dataSet.map(d=>d.shape)))).sort();
+
+function setSelection(selectedObj,selection){
+  event.preventDefault();
+
+  switch(selection) {
+    case "state":
+        $stateInput.value = selectedObj.text;
+        break;
+    case "country":
+        $countryInput.value = selectedObj.text;
+        break;
+    case "shape":
+        $shapeInput.value = selectedObj.text;
+        break;
+    case "city":
+        $cityInput.value = selectedObj.text;
+        break;
+    default:
+        
+  }
+
+  
+}
+d3.select("#Ulstate").selectAll("li").data(stateList).enter().append('li')
+.append('a').attr("href","#").attr("onclick","setSelection(this,'state')").text(d => d);
+
+d3.select("#Ulcountry").selectAll("li").data(countryList).enter().append('li','country')
+.append('a').attr("href","#").attr("onclick","setSelection(this,'country')").text(d => d);
+
+d3.select("#Ulshape").selectAll("li").data(shapeList).enter().append('li')
+.append('a').attr("href","#").attr("onclick","setSelection(this,'shape')").text(d => d);
+
+d3.select("#Ulcity").selectAll("li").data(cityList).enter().append('li')
+.append('a').attr("href","#").attr("onclick","setSelection(this,'city')").text(d => d);
+
+
 
 // Add an event listener to the searchButton, call handleSearchButtonClick when clicked
 $searchBtn.addEventListener("click", handleSearchButtonClick);
@@ -30,6 +70,8 @@ var filteredUfoData = dataSet;
 console.log(dataSet.length );
 
 pageCount = Math.ceil(filteredUfoData.length / pgSz);
+
+console.log(pageCount);
 
 // renderTable renders the filteredAddresses to the tbody
 function renderTable(startRow) {
@@ -43,8 +85,15 @@ function renderTable(startRow) {
       for (var j = 0; j < fields.length; j++) {
         // For every field in the address object, create a new cell at set its inner text to be the current value at the current address's field
         var field = fields[j];
+      
         var $cell = $row.insertCell(j);
-        $cell.innerText = ufoData[field];
+        if (j == 0 ) {
+          var dtSplit = ufoData[field].split("/");
+          // test = Date.parse(ufoData[field]);
+          $cell.innerText = dtSplit[0].padStart(2,'0') + "/" + dtSplit[1].padStart(2,'0') +  "/" + dtSplit[2];
+        }
+        else
+          $cell.innerText = ufoData[field];
       }
     }
 
@@ -56,6 +105,7 @@ function renderTable(startRow) {
       columnsToFilter = [];
       
       if ($datetimeInput.value.trim().length > 0){
+        console.log($datetimeInput.value.trim());
         columnsToFilter.push("datetime");
         filterCriteria = filterCriteria + $datetimeInput.value.trim().toLowerCase();
       }
@@ -93,11 +143,17 @@ function renderTable(startRow) {
   
     var filterColumns = "" ;
     for(i = 0; i < columnsToFilter.length ; i++){
-      filterColumns += ufoData[columnsToFilter[i]].toLowerCase();
+      if (columnsToFilter[i] == "datetime"){
+        var dtSplit = ufoData[columnsToFilter[i]].split("/");
+        // console.log((dtSplit[2] + "-" + dtSplit[0].padStart(2,'0') + "-" +dtSplit[1].padStart(2,'0')));
+        filterColumns += (dtSplit[2] + "-" + dtSplit[0].padStart(2,'0') + "-" +dtSplit[1].padStart(2,'0'));
+      }
+      else
+       filterColumns += ufoData[columnsToFilter[i]].toLowerCase();
     }
    
-    //  console.log("filterCriteria =>" + filterCriteria) ;
-    //  console.log("filterColumns =>" + filterColumns) ;
+      console.log("filterCriteria =>" + filterCriteria) ;
+      console.log("filterColumns =>" + filterColumns) ;
       // If true, add the address to the filteredAddresses, otherwise don't add it to filteredAddresses
       return ((filterColumns === filterCriteria));
     });
@@ -128,21 +184,25 @@ function renderTable(startRow) {
     currStrtPg = currStrtPg - pagination_cnts;
     console.log("currStrtPg =>" + currStrtPg);
     console.log("currEndPg =>" + currEndPg);
-    renderTable(currStrtPg - 1);
+    //renderTable(currStrtPg - 1);
+    renderTable((currStrtPg - 1) * pgSz  )
     initPagination();
     }
   }
 
-  function next(){
+  function next(liTagNext){
     console.log("next");
     
-    if ((currEndPg + pagination_cnts ) > pageCount ) {
-      currEndPg = pageCount;
+    
+    if ((currStrtPg + pagination_cnts ) > pageCount ) {
+      // currEndPg = pageCount;
+      liTagNext.class="disabled";
     }
     else {
       currStrtPg = currEndPg + 1;
       currEndPg = currEndPg + pagination_cnts;
-      renderTable(currStrtPg - 1);
+      if (currEndPg  > pageCount ) currEndPg = pageCount;
+      renderTable((currStrtPg - 1) * pgSz );
       initPagination();
     }
     
@@ -150,31 +210,44 @@ function renderTable(startRow) {
     console.log("currEndPg =>" + currEndPg);
   }
 
-  
+function deactivateAllPgntn(){
+  var items = $pagination.getElementsByTagName("li");
 
-function setCurrPage(liTag){
+  for (var i = 0; i < items.length; ++i) {
+    items[i].classList.remove('active');
+  } 
+}
+
+
+function setCurrPage(aiTag){
   console.log("setCurrPage");
-  console.log(liTag.text);
+  console.log(aiTag.text);
   
-  renderTable((liTag.text * pgSz) - 1);
-  liTag.parentNode.classList.add('active'); 
+  renderTable((aiTag.text - 1) * pgSz  ); 
+  
+  
+  aiTag.parentNode.classList.add('active'); 
   
 }
 
 function initPagination()
 {
+  console.log("currStrtPg =>" + currStrtPg);
+  console.log("currEndPg =>" + currEndPg);
   var nav = ' <li><a href="#" aria-label="Previous" onclick="previous(this);"> <span aria-hidden="true">&laquo;</span></a></li>';
   for (var s=currStrtPg; s<=currEndPg; s++){
       if (s ==  currStrtPg)
         nav += '<li class="numeros' + ' active ' + '"><a href="#" onclick="setCurrPage(this);">' + (s)+'</a></li>';
       else 
-        nav += '<li class="numeros"><a href="#" onclick="setCurrPage(this);">' + (s)+'</a></li>';
+        nav += '<li class="numeros"><a href="#" onclick="deactivateAllPgntn();setCurrPage(this);">' + (s)+'</a></li>';
   }
 
-  nav += '<li><a href="#" aria-label="Next" onclick="next();">  <span aria-hidden="true">&raquo;</span></a></li>';
+  nav += '<li><a href="#" aria-label="Next" onclick="next(this);">  <span aria-hidden="true">&raquo;</span></a></li>';
 
   $pagination.innerHTML = nav;
 }
+
+
 
 renderTable(firstRow);
 

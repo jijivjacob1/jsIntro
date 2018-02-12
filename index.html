@@ -10,20 +10,82 @@
 </head>
 
 <body>
+  <div class="container text-center jumbotron">
+        <div class="container">
+            <h1>UFO Sightings</h1>
+        </div>
+  </div>
+  
   <div class="container">
     <div class="row">
-      <div class="col-md-4">
-        <div class="form-group">
-          
-          <input type="text" class="form-control" id="datetime" placeholder="date/time">
-          <input type="text" class="form-control" id="city" placeholder="City">
-          <input type="text" class="form-control" id="state" placeholder="State">
-          <input type="text" class="form-control" id="country" placeholder="Country">
-          <input type="text" class="form-control" id="shape" placeholder="Shape">
-          
-          <a id="search" class="btn btn-default">Search</a>
+        <div class="col-lg-4 form-group" >
+            <input type="date" class="form-control" id="datetime" placeholder="date/time" required pattern="[0-9]{4}-[0-9]{2}-[0-9]{2}">
+
         </div>
-      </div>
+       
+       
+        <div class="col-lg-8 form-group" >
+            <div class="input-group">
+                <input type="text" class="form-control" aria-label="..." id="city">
+                <div class="input-group-btn">
+                  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">City <span class="caret"></span></button>
+                  <ul class="dropdown-menu scrollable-menu" role="menu" id="Ulcity" >
+                  
+                  </ul>
+                </div><!-- /btn-group -->
+            </div><!-- /input-group -->
+
+        </div>
+        <div class="col-lg-4 form-group" >
+            <div class="input-group">
+                <input type="text" class="form-control" aria-label="..." id="state">
+                <div class="input-group-btn">
+                  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">State <span class="caret"></span></button>
+                  <ul class="dropdown-menu scrollable-menu" role="menu" id="Ulstate" >
+                  
+                  </ul>
+                </div><!-- /btn-group -->
+            </div><!-- /input-group -->
+
+        </div>
+        <div class="col-lg-4 form-group" >
+            <div class="input-group">
+                <input type="text" class="form-control" aria-label="..." id="country">
+                <div class="input-group-btn">
+                  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">Country <span class="caret"></span></button>
+                  <ul class="dropdown-menu scrollable-menu" role="menu" id="Ulcountry" >
+                  
+                  </ul>
+                </div><!-- /btn-group -->
+              </div><!-- /input-group -->
+
+        </div>
+        <div class="col-lg-4 form-group" >
+            <div class="input-group">
+                <input type="text" class="form-control" aria-label="..." id="shape">
+                <div class="input-group-btn">
+                  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">Shape <span class="caret"></span></button>
+                  <ul class="dropdown-menu scrollable-menu" role="menu" id="Ulshape" >
+                  
+                  </ul>
+                </div><!-- /btn-group -->
+            </div><!-- /input-group -->
+
+        </div>
+        <div class="col-lg-12 form-group text-center" >
+            <a id="search" class="btn btn-default">Search</a>
+
+        </div>
+        <!-- <div class="col-lg-4 form-group" >
+            <a id="search" class="btn btn-default">Search</a>
+
+        </div>
+        <div class="col-lg-4 form-group center" >
+            <a id="reset" class="btn btn-default">Reset</a>
+
+        </div> -->
+
+        
     </div>
     <div class="row">
       <div class="col-md-12">
@@ -46,16 +108,18 @@
       </div>
     </div>
     <div class="row">
-      <div class="col-md-12">
-          <nav aria-label="Page navigation">
-              <ul class="pagination">
+      <div class="col-md-12 text-center" >
+          <nav aria-label="Page navigation" >
+              <ul class="pagination ">
                
               </ul>
             </nav>
       </div>
     </div>
   </div>
-  <script src="https://d3js.org/d3.v4.min.js"></script>  ß
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+  <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+  <script src="https://d3js.org/d3.v4.min.js"></script>  
   <script src="Data.js" type="text/javascript"></script>
   <script src="index.js" type="text/javascript"></script>
 </body>
